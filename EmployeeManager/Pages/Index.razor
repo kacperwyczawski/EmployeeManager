@@ -1,38 +1,73 @@
 ﻿@page "/"
 @using EmployeeManager.Models
 @using EmployeeManager.Services
+@using System.Formats.Asn1
+@using Microsoft.EntityFrameworkCore
 @inject EmployeeService EmployeeService
+@inject SalaryService SalaryService
+@inject DepartmentService DepartmentService
+@inject ILogger<Index> Logger
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
+<MudStack>
 
-Welcome to your new app.
-
-@if (_employees is null)
-{
-    <p>Loading...</p>
-}
-else
-{
-    <ol>
-        @foreach (var employee in _employees)
+    <MudStack Row="true" AlignItems="AlignItems.Center" Class="ma-2">
+        <MudIcon Icon="@Icons.Filled.PermContactCalendar" Size="Size.Large" Color="Color.Primary"/>
+        <MudText Typo="Typo.h4">Employee Manager</MudText>
+        @if (_selectedDepartment is not null)
         {
-            <li>@employee.FirstName</li>
+            <MudText Typo="Typo.subtitle1">@_selectedDepartment.DeptName</MudText>
         }
-    </ol>
-}
+    </MudStack>
+
+    @if (_departments is null)
+    {
+        <MudProgressLinear Color="Color.Primary" Indeterminate="true"/>
+    }
+    else
+    {
+        <div>
+            @foreach (var department in _departments)
+            {
+                <MudButton Variant="Variant.Filled"
+                           Color="@DepartmentButtonColor(department)"
+                           Class="ma-2"
+                           OnClick="@(() => OnDepartmentSelected(department))">
+                    @department.DeptName
+                </MudButton>
+            }
+        </div>
+    }
+
+</MudStack>
 
 @code
 {
 
-    IEnumerable<Employee>? _employees;
+    Department? _selectedDepartment;
+
+    Color DepartmentButtonColor(Department department) =>
+        _selectedDepartment == department ? Color.Primary : Color.Default;
+
+    IList<Department>? _departments;
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-
-        _employees = await EmployeeService.GetEmployeesAsync();
+        _departments = await DepartmentService.GetDepartmentsAsync();
     }
 
+    private void OnDepartmentSelected(Department department)
+    {
+        if (_selectedDepartment == department)
+        {
+            _selectedDepartment = null;
+            return;
+        }
+
+        _selectedDepartment = department;
+
+    // TODO: Query employees
+    }
 }
