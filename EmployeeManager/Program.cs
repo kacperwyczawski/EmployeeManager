@@ -11,6 +11,7 @@ builder.Services.AddDbContext<EmployeeManagerContext>();
 builder.Services.AddMudServices();
 builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddScoped<SalaryService>();
+builder.Services.AddScoped<DepartmentService>();
 
 var app = builder.Build();
 
