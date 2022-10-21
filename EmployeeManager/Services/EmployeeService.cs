@@ -11,6 +11,8 @@ public class EmployeeService
     public EmployeeService(EmployeeManagerContext context) =>
         _context = context;
 
-    public async Task<List<Employee>> GetEmployeesAsync() =>
-        await _context.Employees.AsNoTracking().ToListAsync();
+    public IQueryable<DeptEmp> GetEmployees(string departmentId) =>
+        _context.DeptEmps
+            .AsNoTracking()
+            .Where(de => de.DeptNo == departmentId);
 }
