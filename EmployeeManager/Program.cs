@@ -1,5 +1,6 @@
 using EmployeeManager.Data;
 using EmployeeManager.Services;
+using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,7 @@ builder.Services.AddServerSideBlazor();
 
 builder.Services.AddDbContext<EmployeeManagerContext>();
 builder.Services.AddScoped<EmployeeService>();
+builder.Services.AddMudServices();
 
 var app = builder.Build();
 
