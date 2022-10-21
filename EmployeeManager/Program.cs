@@ -1,7 +1,13 @@
+using EmployeeManager.Data;
+using EmployeeManager.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+
+builder.Services.AddDbContext<EmployeeManagerContext>();
+builder.Services.AddScoped<EmployeeService>();
 
 var app = builder.Build();
 
