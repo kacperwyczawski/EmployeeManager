@@ -12,62 +12,19 @@
 
 <MudStack>
 
-    <MudStack Row="true" AlignItems="AlignItems.Center" Class="ma-2">
+    <MudPaper Class="pa-4 d-flex align-center gap-4">
         <MudIcon Icon="@Icons.Filled.PermContactCalendar" Size="Size.Large" Color="Color.Primary"/>
         <MudText Typo="Typo.h4">Employee Manager</MudText>
-        @if (_selectedDepartment is not null)
-        {
-            <MudText Typo="Typo.subtitle1">@_selectedDepartment.DeptName</MudText>
-        }
-    </MudStack>
-
-    @if (_departments is null)
-    {
-        <MudProgressLinear Color="Color.Primary" Indeterminate="true"/>
-    }
-    else
-    {
-        <div>
-            @foreach (var department in _departments)
-            {
-                <MudButton Variant="Variant.Filled"
-                           Color="@DepartmentButtonColor(department)"
-                           Class="ma-2"
-                           OnClick="@(() => OnDepartmentSelected(department))">
-                    @department.DeptName
-                </MudButton>
-            }
-        </div>
-    }
+    </MudPaper>
+    
+    <MudPaper Class="pa-4 d-flex align-center">
+        <MudSwitch @bind-Checked="_showFilters" Color="Color.Primary"/>
+        <MudText>Filters</MudText>
+    </MudPaper>
 
 </MudStack>
 
 @code
 {
-
-    Department? _selectedDepartment;
-
-    Color DepartmentButtonColor(Department department) =>
-        _selectedDepartment == department ? Color.Primary : Color.Default;
-
-    IList<Department>? _departments;
-
-    protected override async Task OnInitializedAsync()
-    {
-        await base.OnInitializedAsync();
-        _departments = await DepartmentService.GetDepartmentsAsync();
-    }
-
-    private void OnDepartmentSelected(Department department)
-    {
-        if (_selectedDepartment == department)
-        {
-            _selectedDepartment = null;
-            return;
-        }
-
-        _selectedDepartment = department;
-
-    // TODO: Query employees
-    }
+    bool _showFilters;
 }
