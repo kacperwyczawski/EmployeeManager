@@ -9,9 +9,10 @@ builder.Services.AddServerSideBlazor();
 
 builder.Services.AddDbContext<EmployeeManagerContext>();
 builder.Services.AddMudServices();
-builder.Services.AddScoped<EmployeeService>();
+builder.Services.AddScoped<EmployeeViewService>();
 builder.Services.AddScoped<SalaryService>();
 builder.Services.AddScoped<DepartmentService>();
+builder.Services.AddScoped<TitleService>();
 
 var app = builder.Build();
 
