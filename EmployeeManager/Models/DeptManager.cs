@@ -8,7 +8,7 @@ namespace EmployeeManager.Models
 {
     [Table("dept_manager")]
     [Index("DeptNo", Name = "dept_no")]
-    public partial class DeptManager
+    public class DeptManager
     {
         [Key]
         [Column("emp_no")]
@@ -24,9 +24,9 @@ namespace EmployeeManager.Models
 
         [ForeignKey("DeptNo")]
         [InverseProperty("DeptManagers")]
-        public virtual Department DeptNoNavigation { get; set; } = null!;
+        public Department DeptNoNavigation { get; set; } = null!;
         [ForeignKey("EmpNo")]
         [InverseProperty("DeptManagers")]
-        public virtual Employee EmpNoNavigation { get; set; } = null!;
+        public Employee EmpNoNavigation { get; set; } = null!;
     }
 }
