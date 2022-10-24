@@ -36,7 +36,6 @@ public class EmployeeViewService
         foreach (var employee in employees)
         {
             yield return new EmployeeView(
-                Id: employee.EmpNo,
                 FirstName: employee.FirstName,
                 LastName: employee.LastName,
                 IsMale: employee.Gender == "M",
