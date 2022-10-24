@@ -7,4 +7,4 @@ public record EmployeeView(
     string DepartmentName,
     string JobTitle,
     int Salary,
-    char Gender);
+    bool IsMale);

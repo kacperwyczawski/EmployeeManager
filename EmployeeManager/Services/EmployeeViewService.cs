@@ -39,7 +39,7 @@ public class EmployeeViewService
                 Id: employee.EmpNo,
                 FirstName: employee.FirstName,
                 LastName: employee.LastName,
-                Gender: employee.Gender[0],
+                IsMale: employee.Gender == "M",
                 DepartmentName: _departmentService.GetDepartmentName(employee.EmpNo),
                 JobTitle: _titleService.GetTitleName(employee.EmpNo),
                 Salary: _salaryService.GetSalaryValue(employee.EmpNo)
