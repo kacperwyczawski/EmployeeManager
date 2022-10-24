@@ -19,11 +19,12 @@
                 @foreach (var employee in _employees)
                 {
                     <MudStack Row="true">
-                        <MudIcon Size="Size.Small" Icon="@(employee.IsMale ? Icons.Filled.Male : Icons.Filled.Female)"/>
+                        <MudIcon Size="Size.Small" Icon="@(employee.IsMale ? Icons.Filled.Male : Icons.Filled.Female)"
+                                 Color="@(employee.IsMale ? Color.Tertiary : Color.Secondary)"/>
                         <MudText>@employee.JobTitle <strong>@employee.FirstName @employee.LastName</strong></MudText>
-                        <MudIcon Size="Size.Small" Icon="@Icons.Filled.AttachMoney"/>
+                        <MudIcon Size="Size.Small" Icon="@Icons.Filled.AttachMoney" Color="Color.Success"/>
                         <MudText>@employee.Salary</MudText>
-                        <MudIcon Size="Size.Small" Icon="@Icons.Filled.Assignment"/>
+                        <MudIcon Size="Size.Small" Icon="@Icons.Filled.Assignment" Color="Color.Warning"/>
                         <MudText>@employee.DepartmentName</MudText>
                     </MudStack>
                 }
