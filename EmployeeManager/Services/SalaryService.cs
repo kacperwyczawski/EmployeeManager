@@ -12,10 +12,11 @@ public class SalaryService
     public SalaryService(EmployeeManagerContext context) => 
         _context = context;
 
-    public Salary? GetRecentSalary(int employeeId) =>
+    public int GetSalaryValue(int employeeId) =>
         _context.Salaries
             .AsNoTracking()
-            .Where(salary => salary.EmpNo == employeeId)
-            .AsEnumerable()
-            .MaxBy(salary => salary.ToDate);
+            .Where(s => s.EmpNo == employeeId)
+            .OrderByDescending(s => s.ToDate)
+            .First()
+            .Salary1;
 }
