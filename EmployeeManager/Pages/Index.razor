@@ -2,8 +2,9 @@
 @using EmployeeManager.Models
 @using EmployeeManager.Services
 @using System.Formats.Asn1
+@using EmployeeManager.ViewModels
 @using Microsoft.EntityFrameworkCore
-@inject EmployeeService EmployeeService
+@inject EmployeeViewService EmployeeService
 @inject SalaryService SalaryService
 @inject DepartmentService DepartmentService
 @inject ILogger<Index> Logger
@@ -16,15 +17,49 @@
         <MudIcon Icon="@Icons.Filled.PermContactCalendar" Size="Size.Large" Color="Color.Primary"/>
         <MudText Typo="Typo.h4">Employee Manager</MudText>
     </MudPaper>
-    
-    <MudPaper Class="pa-4 d-flex align-center">
-        <MudSwitch @bind-Checked="_showFilters" Color="Color.Primary"/>
-        <MudText>Filters</MudText>
+
+    <MudPaper Class="pa-4">
+        <MudStack>
+            @if (_employees is not null && _employees.Any())
+            {
+                @foreach (var employee in _employees)
+                {
+                    <MudStack Row="true">
+                        <MudIcon Size="Size.Small" Icon="@(employee.IsMale ? Icons.Filled.Male : Icons.Filled.Female)"/>
+                        <MudText>@employee.JobTitle <strong>@employee.FirstName @employee.LastName</strong></MudText>
+                        <MudIcon Size="Size.Small" Icon="@Icons.Filled.AttachMoney"/>
+                        <MudText>@employee.Salary</MudText>
+                        <MudIcon Size="Size.Small" Icon="@Icons.Filled.Assignment"/>
+                        <MudText>@employee.DepartmentName</MudText>
+                    </MudStack>
+                }
+            }
+            <MudButton Color="Color.Primary"
+                       OnClick="@LoadEmployees">
+                @LoadButtonText
+            </MudButton>
+        </MudStack>
     </MudPaper>
 
 </MudStack>
 
 @code
 {
-    bool _showFilters;
+    string LoadButtonText => _employees is null ? "Load Employees" : "Load More Employees";
+
+    int _offset;
+
+    IEnumerable<EmployeeView>? _employees;
+
+    void LoadEmployees()
+    {
+        _employees = EmployeeService.GetEmployees(_offset, 50);
+        _offset += 50;
+    }
+    
+    void ResetEmployees()
+    {
+        _employees = null;
+        _offset = 0;
+    }
 }
