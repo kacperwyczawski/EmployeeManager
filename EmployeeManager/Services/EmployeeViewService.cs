@@ -1,5 +1,4 @@
 ﻿using EmployeeManager.Data;
-using EmployeeManager.Models;
 using EmployeeManager.ViewModels;
 using Microsoft.EntityFrameworkCore;
 

@@ -1,7 +1,5 @@
 ﻿using EmployeeManager.Data;
-using EmployeeManager.Models;
 using Microsoft.EntityFrameworkCore;
-using MudBlazor.Extensions;
 
 namespace EmployeeManager.Services;
 

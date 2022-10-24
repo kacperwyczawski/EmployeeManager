@@ -1,30 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
+﻿using Microsoft.EntityFrameworkCore;
 using EmployeeManager.Models;
+// ReSharper disable IdentifierTypo
+// ReSharper disable StringLiteralTypo
 
 namespace EmployeeManager.Data
 {
-    public partial class EmployeeManagerContext : DbContext
+    public class EmployeeManagerContext : DbContext
     {
-        public EmployeeManagerContext()
-        {
-        }
 
         public EmployeeManagerContext(DbContextOptions<EmployeeManagerContext> options)
             : base(options)
         {
         }
 
-        public virtual DbSet<CurrentDeptEmp> CurrentDeptEmps { get; set; } = null!;
-        public virtual DbSet<Department> Departments { get; set; } = null!;
-        public virtual DbSet<DeptEmp> DeptEmps { get; set; } = null!;
-        public virtual DbSet<DeptEmpLatestDate> DeptEmpLatestDates { get; set; } = null!;
-        public virtual DbSet<DeptManager> DeptManagers { get; set; } = null!;
-        public virtual DbSet<Employee> Employees { get; set; } = null!;
-        public virtual DbSet<Salary> Salaries { get; set; } = null!;
-        public virtual DbSet<Title> Titles { get; set; } = null!;
+        public DbSet<CurrentDeptEmp> CurrentDeptEmps { get; set; } = null!;
+        public DbSet<Department> Departments { get; set; } = null!;
+        public DbSet<DeptEmp> DeptEmps { get; set; } = null!;
+        public DbSet<DeptEmpLatestDate> DeptEmpLatestDates { get; set; } = null!;
+        public DbSet<DeptManager> DeptManagers { get; set; } = null!;
+        public DbSet<Employee> Employees { get; set; } = null!;
+        public DbSet<Salary> Salaries { get; set; } = null!;
+        public DbSet<Title> Titles { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -120,10 +116,6 @@ namespace EmployeeManager.Data
                     .HasForeignKey(d => d.EmpNo)
                     .HasConstraintName("titles_ibfk_1");
             });
-
-            OnModelCreatingPartial(modelBuilder);
         }
-
-        partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
     }
 }

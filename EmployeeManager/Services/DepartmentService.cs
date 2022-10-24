@@ -1,5 +1,4 @@
 ﻿using EmployeeManager.Data;
-using EmployeeManager.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace EmployeeManager.Services;
