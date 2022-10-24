@@ -44,4 +44,6 @@ public class EmployeeViewService
             );
         }
     }
+    
+    public int GetEmployeesCount() => _context.Employees.Count();
 }

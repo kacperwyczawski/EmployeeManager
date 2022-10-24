@@ -2,6 +2,7 @@
 @using EmployeeManager.Services
 @using EmployeeManager.ViewModels
 @inject EmployeeViewService EmployeeService
+@inject ILogger<Index> Logger
 
 <PageTitle>Index</PageTitle>
 
@@ -12,49 +13,62 @@
         <MudText Typo="Typo.h4">Employee Manager</MudText>
     </MudPaper>
 
-    <MudPaper Class="pa-4">
-        <MudStack>
-            @if (_employees is not null && _employees.Any())
-            {
+    @if (_employees is not null && _employees.Any())
+    {
+        <MudPaper Class="pa-4 d-flex justify-center">
+            <MudPagination Count="@TotalPages" SelectedChanged="@ChangePage"/>
+        </MudPaper>
+
+        <MudPaper Class="pa-4">
+            <MudStack>
                 @foreach (var employee in _employees)
                 {
                     <MudStack Row="true">
                         <MudIcon Size="Size.Small" Icon="@(employee.IsMale ? Icons.Filled.Male : Icons.Filled.Female)"
                                  Color="@(employee.IsMale ? Color.Tertiary : Color.Secondary)"/>
-                        <MudText>@employee.JobTitle <strong>@employee.FirstName @employee.LastName</strong></MudText>
+                        <MudText>
+                            @employee.JobTitle <strong>@employee.FirstName @employee.LastName</strong>
+                        </MudText>
                         <MudIcon Size="Size.Small" Icon="@Icons.Filled.AttachMoney" Color="Color.Success"/>
                         <MudText>@employee.Salary</MudText>
                         <MudIcon Size="Size.Small" Icon="@Icons.Filled.Assignment" Color="Color.Warning"/>
                         <MudText>@employee.DepartmentName</MudText>
                     </MudStack>
                 }
-            }
-            <MudButton Color="Color.Primary"
-                       OnClick="@LoadEmployees">
-                @LoadButtonText
-            </MudButton>
-        </MudStack>
-    </MudPaper>
+            </MudStack>
+        </MudPaper>
+    }
+    else
+    {
+        <MudPaper Class="pa-4">
+            <MudButton Color="Color.Primary" OnClick="LoadEmployees">Load Employees</MudButton>
+        </MudPaper>
+    }
 
 </MudStack>
 
 @code
 {
-    string LoadButtonText => _employees is null ? "Load Employees" : "Load More Employees";
+    int _selectedPage = 1;
 
-    int _offset;
+    int _itemsPerPage = 20;
 
     IEnumerable<EmployeeView>? _employees;
 
+    int TotalPages => EmployeeService.GetEmployeesCount() / _itemsPerPage + 1;
+
+    int Offset => (_selectedPage - 1) * _itemsPerPage;
+
     void LoadEmployees()
     {
-        _employees = EmployeeService.GetEmployees(_offset, 50);
-        _offset += 50;
+        Logger.LogInformation("Loading employees (page {Page}, offset {Offset})", _selectedPage, Offset);
+        _employees = EmployeeService.GetEmployees(Offset, _itemsPerPage);
     }
-    
-    void ResetEmployees()
+
+    private void ChangePage(int page)
     {
-        _employees = null;
-        _offset = 0;
+        Logger.LogInformation("Changing page to {Page}", page);
+        _selectedPage = page;
+        LoadEmployees();
     }
 }
