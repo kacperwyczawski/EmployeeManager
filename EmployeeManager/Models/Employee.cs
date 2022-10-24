@@ -41,14 +41,5 @@ namespace EmployeeManager.Models
         public ICollection<Salary> Salaries { get; set; }
         [InverseProperty("EmpNoNavigation")]
         public ICollection<Title> Titles { get; set; }
-        
-        public DeptEmp? RecentlyEmployedAt => DeptEmps.MaxBy(de => de.ToDate);
-        
-        public DeptManager? RecentlyEmployedAsManagerAt => DeptManagers.MaxBy(dm => dm.ToDate);
-        
-        public Salary? RecentlyEarnedSalary => Salaries.MaxBy(s => s.ToDate);
-        
-        public Title? RecentlyHeldTitle => Titles.SingleOrDefault(t => t.ToDate is null)
-                                           ?? Titles.MaxBy(t => t.ToDate);
     }
 }
