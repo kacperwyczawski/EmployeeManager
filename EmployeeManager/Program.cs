@@ -1,5 +1,6 @@
 using EmployeeManager.Data;
 using EmployeeManager.Services;
+using Microsoft.EntityFrameworkCore;
 using MudBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-builder.Services.AddDbContext<EmployeeManagerContext>();
+// TODO: move to secrets
+const string connectionString = "server=localhost;database=employees;user=root;password=113971";
+builder.Services.AddDbContext<EmployeeManagerContext>(
+    options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddMudServices();
 builder.Services.AddScoped<EmployeeViewService>();
 builder.Services.AddScoped<SalaryService>();
