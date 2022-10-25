@@ -3,6 +3,12 @@
 <MudDialog>
     <DialogContent>
         <MudNumericField @bind-Value="AppState.ItemsPerPage" Label="Items per page" Min="0" Max="100"/>
+        <MudSelect T="AppState.GenderFilter" @bind-Value="AppState.Gender" Label="Gender">
+            @foreach(AppState.GenderFilter option in Enum.GetValues(typeof(AppState.GenderFilter)))
+            {
+                <MudSelectItem Value="@option">@option</MudSelectItem>
+            }
+        </MudSelect>
     </DialogContent>
     <DialogActions>
         <MudButton OnClick="@AppState.ResetToDefaults">Default</MudButton>
