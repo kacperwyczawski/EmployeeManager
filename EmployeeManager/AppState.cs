@@ -2,8 +2,11 @@
 
 public class AppState
 {
-    public AppState()
+    private readonly ILogger<AppState> _logger;
+
+    public AppState(ILogger<AppState> logger)
     {
+        _logger = logger;
         ResetToDefaults();
     }
 
@@ -14,6 +17,8 @@ public class AppState
     public Filter<string> DepartmentFilter { get; set; } = new("Customer Service");
 
     public Filter<SalaryRange> SalaryFilter { get; set; } = new(new SalaryRange(12000, 18000));
+    
+    public event Action? OnFiltersChange;
 
     public void ResetToDefaults()
     {
@@ -46,6 +51,12 @@ public class AppState
             value = default!;
             return false;
         }
+    }
+
+    public void NotifyFiltersChanged()
+    {
+        _logger.LogInformation("Invoking " + nameof(OnFiltersChange));
+        OnFiltersChange?.Invoke();
     }
 
     public class SalaryRange

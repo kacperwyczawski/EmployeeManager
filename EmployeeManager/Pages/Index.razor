@@ -25,11 +25,11 @@
             {
                 <MudChip Color="@(genderChar == 'M' ? Color.Tertiary : Color.Secondary)"
                          OnClose="@(() => AppState.GenderFilter.IsActive = false)">
-                    Gender: 
+                    Gender:
                     @(genderChar == 'M' ? "Male" : "Female")
                 </MudChip>
             }
-            
+
             @if (AppState.DepartmentFilter.GetAllowedValue(out var department))
             {
                 <MudChip Color="Color.Primary"
@@ -37,7 +37,7 @@
                     Department: @department
                 </MudChip>
             }
-            
+
             @if (AppState.SalaryFilter.GetAllowedValue(out var salary))
             {
                 <MudChip Color="Color.Success"
@@ -98,10 +98,29 @@
         _employees = EmployeeService.GetEmployees(Offset, AppState.ItemsPerPage);
     }
 
+    void UnloadEmployees()
+    {
+        Logger.LogInformation("Unloading employees");
+        _employees = null;
+        StateHasChanged();
+    }
+
     private void ChangePage(int page)
     {
         Logger.LogInformation("Changing page to {Page}", page);
         _selectedPage = page;
         LoadEmployees();
+    }
+
+    protected override void OnInitialized()
+    {
+        Logger.LogInformation("Initializing");
+        AppState.OnFiltersChange += UnloadEmployees;
+    }
+    
+    void Dispose()
+    {
+        Logger.LogInformation("Disposing");
+        AppState.OnFiltersChange -= UnloadEmployees;
     }
 }
