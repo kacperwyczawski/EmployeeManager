@@ -17,6 +17,37 @@
         <MudIconButton Icon="@Icons.Filled.Settings" OnClick="@(() => DialogService.Show<Settings>("Settings"))"/>
     </MudPaper>
 
+    @if (AppState.DepartmentFilter.IsActive || AppState.GenderFilter.IsActive || AppState.SalaryFilter.IsActive)
+    {
+        <MudPaper Class="pa-4 d-flex align-center gap-4">
+            <MudText>Filters:</MudText>
+            @if (AppState.GenderFilter.GetAllowedValue(out var genderChar))
+            {
+                <MudChip Color="@(genderChar == 'M' ? Color.Tertiary : Color.Secondary)"
+                         OnClose="@(() => AppState.GenderFilter.IsActive = false)">
+                    Gender: 
+                    @(genderChar == 'M' ? "Male" : "Female")
+                </MudChip>
+            }
+            
+            @if (AppState.DepartmentFilter.GetAllowedValue(out var department))
+            {
+                <MudChip Color="Color.Primary"
+                         OnClose="@(() => AppState.DepartmentFilter.IsActive = false)">
+                    Department: @department
+                </MudChip>
+            }
+            
+            @if (AppState.SalaryFilter.GetAllowedValue(out var salary))
+            {
+                <MudChip Color="Color.Success"
+                         OnClose="@(() => AppState.SalaryFilter.IsActive = false)">
+                    Salary range: @salary
+                </MudChip>
+            }
+        </MudPaper>
+    }
+
     @if (_employees is not null && _employees.Any())
     {
         <MudPaper Class="pa-4 d-flex justify-center">
