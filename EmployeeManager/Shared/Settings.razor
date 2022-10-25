@@ -2,49 +2,51 @@
 
 <MudDialog>
     <DialogContent>
+        <MudStack>
 
-        <MudNumericField @bind-Value="AppState.ItemsPerPage" Label="Items per page" Min="0" Max="100"/>
+            <MudNumericField @bind-Value="AppState.ItemsPerPage" Label="Items per page" Min="0" Max="100"/>
 
-        @* Gender *@
-        <MudSwitch @bind-Checked="AppState.GenderFilter.IsActive"
-                   Label="Filter gender" Color="Color.Primary"/>
-        @if (AppState.GenderFilter.IsActive)
-        {
-            <MudRadioGroup @bind-SelectedOption="AppState.GenderFilter.AllowedValue">
-                <MudRadio Option="@('M')" Color="Color.Tertiary">Male</MudRadio>
-                <MudRadio Option="@('F')" Color="Color.Secondary">Female</MudRadio>
-            </MudRadioGroup>
-        }
+            @* Gender *@
+            <MudSwitch @bind-Checked="AppState.GenderFilter.IsActive"
+                       Label="Filter gender" Color="Color.Primary"/>
+            @if (AppState.GenderFilter.IsActive)
+            {
+                <MudRadioGroup @bind-SelectedOption="AppState.GenderFilter.AllowedValue">
+                    <MudRadio Option="@('M')" Color="Color.Tertiary">Male</MudRadio>
+                    <MudRadio Option="@('F')" Color="Color.Secondary">Female</MudRadio>
+                </MudRadioGroup>
+            }
 
-        @* Department *@
-        <MudSwitch @bind-Checked="AppState.DepartmentFilter.IsActive"
-                   Label="Filter department" Color="Color.Primary"/>
-        @if (AppState.DepartmentFilter.IsActive)
-        {
-            <MudSelect @bind-Value="AppState.DepartmentFilter.AllowedValue">
-                <MudSelectItem Value="@("Customer Service")"/>
-                <MudSelectItem Value="@("Development")"/>
-                <MudSelectItem Value="@("Finance")"/>
-                <MudSelectItem Value="@("Human Resources")"/>
-                <MudSelectItem Value="@("Marketing")"/>
-                <MudSelectItem Value="@("Production")"/>
-                <MudSelectItem Value="@("Quality Management")"/>
-                <MudSelectItem Value="@("Research")"/>
-                <MudSelectItem Value="@("Sales")"/>
-            </MudSelect>
-        }
-        
-        @* Salary *@
-        <MudSwitch @bind-Checked="AppState.SalaryFilter.IsActive"
-                   Label="Filter salary" Color="Color.Primary"/>
-        @if (AppState.SalaryFilter.IsActive)
-        {
-            <MudNumericField @bind-Value="AppState.SalaryFilter.AllowedValue.From"
-                             Label="From" Min="0" Max="100000"/>
-            <MudNumericField @bind-Value="AppState.SalaryFilter.AllowedValue.To"
-                             Label="To" Min="0" Max="100000"/>
-        }
+            @* Department *@
+            <MudSwitch @bind-Checked="AppState.DepartmentFilter.IsActive"
+                       Label="Filter department" Color="Color.Primary"/>
+            @if (AppState.DepartmentFilter.IsActive)
+            {
+                <MudSelect @bind-Value="AppState.DepartmentFilter.AllowedValue">
+                    <MudSelectItem Value="@("Customer Service")"/>
+                    <MudSelectItem Value="@("Development")"/>
+                    <MudSelectItem Value="@("Finance")"/>
+                    <MudSelectItem Value="@("Human Resources")"/>
+                    <MudSelectItem Value="@("Marketing")"/>
+                    <MudSelectItem Value="@("Production")"/>
+                    <MudSelectItem Value="@("Quality Management")"/>
+                    <MudSelectItem Value="@("Research")"/>
+                    <MudSelectItem Value="@("Sales")"/>
+                </MudSelect>
+            }
 
+            @* Salary *@
+            <MudSwitch @bind-Checked="AppState.SalaryFilter.IsActive"
+                       Label="Filter salary" Color="Color.Primary"/>
+            @if (AppState.SalaryFilter.IsActive)
+            {
+                <MudNumericField @bind-Value="AppState.SalaryFilter.AllowedValue.From"
+                                 Label="From" Min="0" Max="100000"/>
+                <MudNumericField @bind-Value="AppState.SalaryFilter.AllowedValue.To"
+                                 Label="To" Min="0" Max="100000"/>
+            }
+
+        </MudStack>
     </DialogContent>
     <DialogActions>
 
