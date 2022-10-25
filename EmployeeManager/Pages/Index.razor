@@ -4,14 +4,17 @@
 @inject EmployeeViewService EmployeeService
 @inject ILogger<Index> Logger
 @inject AppState AppState
+@inject IDialogService DialogService
 
-<PageTitle>Index</PageTitle>
+<PageTitle>Employee Manager</PageTitle>
 
 <MudStack>
 
     <MudPaper Class="pa-4 d-flex align-center gap-4">
         <MudIcon Icon="@Icons.Filled.PermContactCalendar" Size="Size.Large" Color="Color.Primary"/>
         <MudText Typo="Typo.h4">Employee Manager</MudText>
+        <MudSpacer/>
+        <MudIconButton Icon="@Icons.Filled.Settings" OnClick="@(() => DialogService.Show<Settings>("Settings"))"/>
     </MudPaper>
 
     @if (_employees is not null && _employees.Any())

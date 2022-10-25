@@ -1,0 +1,23 @@
+﻿@inject AppState AppState
+
+<MudDialog>
+    <DialogContent>
+        <MudNumericField @bind-Value="AppState.ItemsPerPage" Label="Items per page" Min="0" Max="100"/>
+    </DialogContent>
+    <DialogActions>
+        <MudButton OnClick="@AppState.ResetToDefaults">Default</MudButton>
+        <MudButton OnClick="Save" Variant="Variant.Filled" Color="Color.Success">Save</MudButton>
+    </DialogActions>
+</MudDialog>
+
+@code
+{
+    [CascadingParameter]
+    [EditorRequired]
+    MudDialogInstance MudDialog { get; set; } = null!;
+    
+    void Save()
+    {
+        MudDialog.Close(DialogResult.Ok(true));
+    }
+}
