@@ -3,6 +3,7 @@
 @using EmployeeManager.ViewModels
 @inject EmployeeViewService EmployeeService
 @inject ILogger<Index> Logger
+@inject AppState AppState
 
 <PageTitle>Index</PageTitle>
 
@@ -51,18 +52,16 @@
 {
     int _selectedPage = 1;
 
-    int _itemsPerPage = 20;
-
     IEnumerable<EmployeeView>? _employees;
 
-    int TotalPages => EmployeeService.GetEmployeesCount() / _itemsPerPage + 1;
+    int TotalPages => EmployeeService.GetEmployeesCount() / AppState.ItemsPerPage + 1;
 
-    int Offset => (_selectedPage - 1) * _itemsPerPage;
+    int Offset => (_selectedPage - 1) * AppState.ItemsPerPage;
 
     void LoadEmployees()
     {
         Logger.LogInformation("Loading employees (page {Page}, offset {Offset})", _selectedPage, Offset);
-        _employees = EmployeeService.GetEmployees(Offset, _itemsPerPage);
+        _employees = EmployeeService.GetEmployees(Offset, AppState.ItemsPerPage);
     }
 
     private void ChangePage(int page)

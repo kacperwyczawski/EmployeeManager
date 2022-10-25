@@ -1,3 +1,4 @@
+using EmployeeManager;
 using EmployeeManager.Data;
 using EmployeeManager.Services;
 using Microsoft.EntityFrameworkCore;
@@ -17,6 +18,7 @@ builder.Services.AddScoped<EmployeeViewService>();
 builder.Services.AddScoped<SalaryService>();
 builder.Services.AddScoped<DepartmentService>();
 builder.Services.AddScoped<TitleService>();
+builder.Services.AddScoped<AppState>();
 
 var app = builder.Build();
 
