@@ -12,9 +12,9 @@ public class AppState
     public Filter<char> GenderFilter { get; set; } = new('M');
 
     public Filter<string> DepartmentFilter { get; set; } = new("Customer Service");
-    
-    public Filter<(int from, int to)> SalaryFilter { get; set; } = new ((12000, 18000));
-    
+
+    public Filter<SalaryRange> SalaryFilter { get; set; } = new(new SalaryRange(12000, 18000));
+
     public void ResetToDefaults()
     {
         ItemsPerPage = 20;
@@ -32,9 +32,9 @@ public class AppState
         }
 
         public T AllowedValue { get; set; }
-        
+
         public bool IsActive;
-        
+
         public bool GetAllowedValue(out T value)
         {
             if (IsActive)
@@ -46,5 +46,43 @@ public class AppState
             value = default!;
             return false;
         }
+    }
+
+    public class SalaryRange
+    {
+        private int _from;
+        private int _to;
+
+        public SalaryRange(int from, int to)
+        {
+            From = from;
+            To = to;
+        }
+
+        public int From
+        {
+            get => _from;
+            set
+            {
+                if (value > To)
+                    To = value;
+
+                _from = value;
+            }
+        }
+
+        public int To
+        {
+            get => _to;
+            set
+            {
+                if (value < From)
+                    From = value;
+
+                _to = value;
+            }
+        }
+        
+        public override string ToString() => $"{From} - {To}";
     }
 }
