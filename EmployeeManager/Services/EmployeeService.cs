@@ -56,7 +56,7 @@ public class EmployeeService
 
         employees = employees.Take(amount);
 
-        _appState.LastEmployeeId = employees.Last().EmpNo;
+        _appState.LastEmployeeId = employees.LastOrDefault()?.EmpNo;
 
         return employees.ToList().Select(e => new EmployeeView(
             FirstName: e.FirstName,
