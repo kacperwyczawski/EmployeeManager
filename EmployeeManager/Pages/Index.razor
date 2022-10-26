@@ -5,6 +5,7 @@
 @inject ILogger<Index> Logger
 @inject AppState AppState
 @inject IDialogService DialogService
+@inject DepartmentService DepartmentService
 
 <PageTitle>Employee Manager</PageTitle>
 
@@ -34,7 +35,7 @@
             {
                 <MudChip Color="Color.Primary"
                          OnClose="@(() => AppState.DepartmentFilter.IsActive = false)">
-                    Department: @department
+                    Department: @DepartmentService.GetDepartment(department).DeptName
                 </MudChip>
             }
 
