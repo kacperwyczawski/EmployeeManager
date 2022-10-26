@@ -90,27 +90,20 @@
 
     void LoadEmployees()
     {
-        _employees = EmployeeService.GetEmployees(); 
-    }
-
-    void UnloadEmployees()
-    {
-        Logger.LogInformation("Unloading employees");
-        _employees = null;
-        AppState.LastEmployeeId = null;
+        _employees = EmployeeService.GetEmployees();
         StateHasChanged();
     }
 
     protected override void OnInitialized()
     {
         Logger.LogInformation("Initializing");
-        AppState.OnFiltersChange += UnloadEmployees;
+        AppState.OnFiltersChange += LoadEmployees;
         LoadEmployees();
     }
     
     void Dispose()
     {
         Logger.LogInformation("Disposing");
-        AppState.OnFiltersChange -= UnloadEmployees;
+        AppState.OnFiltersChange -= LoadEmployees;
     }
 }
