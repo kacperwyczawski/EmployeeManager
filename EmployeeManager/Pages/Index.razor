@@ -95,6 +95,7 @@
     {
         Logger.LogInformation("Unloading employees");
         _employees = null;
+        AppState.LastEmployeeId = null;
         StateHasChanged();
     }
 
