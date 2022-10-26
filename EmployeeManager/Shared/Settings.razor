@@ -12,8 +12,8 @@
             @if (AppState.GenderFilter.IsActive)
             {
                 <MudRadioGroup @bind-SelectedOption="AppState.GenderFilter.AllowedValue">
-                    <MudRadio Option="@('M')" Color="Color.Tertiary">Male</MudRadio>
-                    <MudRadio Option="@('F')" Color="Color.Secondary">Female</MudRadio>
+                    <MudRadio Option="@("M")" Color="Color.Tertiary">Male</MudRadio>
+                    <MudRadio Option="@("F")" Color="Color.Secondary">Female</MudRadio>
                 </MudRadioGroup>
             }
 

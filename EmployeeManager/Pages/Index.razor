@@ -21,12 +21,12 @@
     {
         <MudPaper Class="pa-4 d-flex align-center gap-4">
             <MudText>Filters:</MudText>
-            @if (AppState.GenderFilter.GetAllowedValue(out var genderChar))
+            @if (AppState.GenderFilter.GetAllowedValue(out var gender))
             {
-                <MudChip Color="@(genderChar == 'M' ? Color.Tertiary : Color.Secondary)"
+                <MudChip Color="@(gender == "M" ? Color.Tertiary : Color.Secondary)"
                          OnClose="@(() => AppState.GenderFilter.IsActive = false)">
                     Gender:
-                    @(genderChar == 'M' ? "Male" : "Female")
+                    @(gender == "M" ? "Male" : "Female")
                 </MudChip>
             }
 

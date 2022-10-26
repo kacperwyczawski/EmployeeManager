@@ -33,18 +33,18 @@ public class EmployeeService
             .OrderBy(e => e.EmpNo)
             .Where(e => e.EmpNo > lastId);
 
-        if (_appState.GenderFilter.IsActive)
+        if (_appState.GenderFilter.GetAllowedValue(out var allowedGender))
             employees = employees.Where(e =>
-                e.Gender[0] == _appState.GenderFilter.AllowedValue);
+                e.Gender == allowedGender.ToString());
 
-        if (_appState.DepartmentFilter.IsActive)
+        if (_appState.DepartmentFilter.GetAllowedValue(out var allowedDepartment))
             employees = employees.Where(e =>
-                _departmentService.GetDepartmentName(e.EmpNo) == _appState.DepartmentFilter.AllowedValue);
+                _departmentService.GetDepartmentName(e.EmpNo) == allowedDepartment);
 
-        if (_appState.SalaryFilter.IsActive)
+        if (_appState.SalaryFilter.GetAllowedValue(out var allowedSalary))
             employees = employees.Where(e =>
-                _salaryService.GetSalaryValue(e.EmpNo) >= _appState.SalaryFilter.AllowedValue.From &&
-                _salaryService.GetSalaryValue(e.EmpNo) <= _appState.SalaryFilter.AllowedValue.To);
+                _salaryService.GetSalaryValue(e.EmpNo) >= allowedSalary.From &&
+                _salaryService.GetSalaryValue(e.EmpNo) <= allowedSalary.To);
 
         employees = employees.Take(amount);
         

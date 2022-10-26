@@ -17,7 +17,7 @@ public class AppState
     /// </summary>
     public int? LastEmployeeId { get; set; }
 
-    public Filter<char> GenderFilter { get; set; } = new('M');
+    public Filter<string> GenderFilter { get; set; } = new("M");
 
     public Filter<string> DepartmentFilter { get; set; } = new("Customer Service");
 
