@@ -1,11 +1,14 @@
 ﻿@page "/"
 @using EmployeeManager.Services
 @using EmployeeManager.ViewModels
+@using System.Text.Json
 @inject EmployeeService EmployeeService
 @inject ILogger<Index> Logger
 @inject AppState AppState
 @inject IDialogService DialogService
 @inject DepartmentService DepartmentService
+@inject SalaryService SalaryService
+@inject IJSRuntime JsRuntime
 
 <PageTitle>Employee Manager</PageTitle>
 
@@ -65,6 +68,9 @@
                         <MudText>@employee.Salary</MudText>
                         <MudIcon Size="Size.Small" Icon="@Icons.Filled.Assignment" Color="Color.Warning"/>
                         <MudText>@employee.DepartmentName</MudText>
+                        <MudSpacer/>
+                        <MudIconButton Size="Size.Small" Icon="@Icons.Filled.FileDownload"
+                                       OnClick="@(() => Export(employee))"/>
                     </MudStack>
                 }
             </MudStack>
@@ -108,5 +114,26 @@
     {
         Logger.LogInformation("Disposing");
         AppState.OnFiltersChange -= LoadEmployees;
+    }
+
+    void Export(EmployeeView employeeView)
+    {
+        Logger.LogInformation("Exporting employee #{Id} ({FirstName} {LastName})",
+            employeeView.Id, employeeView.FirstName, employeeView.LastName);
+
+        var salarySum = SalaryService.GetSumOfSalaries(employeeView.Id);
+        var exportData = new
+        {
+            employeeView.FirstName,
+            employeeView.LastName,
+            employeeView.JobTitle,
+            employeeView.DepartmentName,
+            employeeView.Salary,
+            SalarySum = salarySum
+        };
+        var json = JsonSerializer.Serialize(exportData);
+
+        JsRuntime.InvokeAsync<object>("saveFile",
+            $"{employeeView.FirstName}_{employeeView.LastName}.json", json);
     }
 }

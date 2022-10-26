@@ -66,7 +66,8 @@ public class EmployeeService
                 ? e.DeptEmps.OrderByDescending(de => de.ToDate).First().DeptNoNavigation.DeptName
                 : e.DeptManagers.OrderByDescending(dm => dm.ToDate).First().DeptNoNavigation.DeptName,
             JobTitle: _titleService.GetTitleName(e.EmpNo),
-            Salary: e.Salaries.OrderByDescending(s => s.ToDate).First().Salary1
+            Salary: e.Salaries.OrderByDescending(s => s.ToDate).First().Salary1,
+            Id: e.EmpNo
         ));
     }
 

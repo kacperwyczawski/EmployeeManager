@@ -6,4 +6,5 @@ public record EmployeeView(
     string DepartmentName,
     string JobTitle,
     int Salary,
-    bool IsMale);
+    bool IsMale,
+    int Id);

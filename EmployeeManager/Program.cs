@@ -18,6 +18,7 @@ builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddScoped<DepartmentService>();
 builder.Services.AddScoped<TitleService>();
 builder.Services.AddScoped<AppState>();
+builder.Services.AddScoped<SalaryService>();
 
 var app = builder.Build();
 
