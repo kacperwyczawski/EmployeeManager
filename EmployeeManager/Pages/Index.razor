@@ -25,7 +25,7 @@
             @if (AppState.GenderFilter.GetAllowedValue(out var gender))
             {
                 <MudChip Color="@(gender == "M" ? Color.Tertiary : Color.Secondary)"
-                         OnClose="@(() => AppState.GenderFilter.IsActive = false)">
+                         OnClose="@(() => { AppState.GenderFilter.IsActive = false; LoadEmployees(); })">
                     Gender:
                     @(gender == "M" ? "Male" : "Female")
                 </MudChip>
@@ -34,7 +34,7 @@
             @if (AppState.DepartmentFilter.GetAllowedValue(out var department))
             {
                 <MudChip Color="Color.Primary"
-                         OnClose="@(() => AppState.DepartmentFilter.IsActive = false)">
+                         OnClose="@(() => { AppState.DepartmentFilter.IsActive = false; LoadEmployees(); })">
                     Department: @DepartmentService.GetDepartment(department).DeptName
                 </MudChip>
             }
@@ -42,7 +42,7 @@
             @if (AppState.SalaryFilter.GetAllowedValue(out var salary))
             {
                 <MudChip Color="Color.Success"
-                         OnClose="@(() => AppState.SalaryFilter.IsActive = false)">
+                         OnClose="@(() => { AppState.SalaryFilter.IsActive = false; LoadEmployees(); })">
                     Salary range: @salary
                 </MudChip>
             }
