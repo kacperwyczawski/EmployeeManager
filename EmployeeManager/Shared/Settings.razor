@@ -40,9 +40,9 @@
             @if (AppState.SalaryFilter.IsActive)
             {
                 <MudNumericField @bind-Value="AppState.SalaryFilter.AllowedValue.From"
-                                 Label="From" Min="0" Max="100000"/>
+                                 Label="From" Min="0" Max="200000"/>
                 <MudNumericField @bind-Value="AppState.SalaryFilter.AllowedValue.To"
-                                 Label="To" Min="0" Max="100000"/>
+                                 Label="To" Min="0" Max="200000"/>
             }
 
         </MudStack>
