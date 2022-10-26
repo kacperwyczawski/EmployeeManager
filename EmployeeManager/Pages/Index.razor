@@ -69,11 +69,14 @@
                 }
             </MudStack>
         </MudPaper>
-        
-        <MudPaper Class="pa-4">
-            <MudButton Color="Color.Primary" OnClick="LoadEmployees">Load next @AppState.ItemsPerPage employees</MudButton>
-            <MudButton Color="Color.Default" OnClick="@(() => { AppState.LastEmployeeId = null; LoadEmployees(); })">Back to first page</MudButton>
-        </MudPaper>
+
+        @if (_employees.Count() >= AppState.ItemsPerPage)
+        {
+            <MudPaper Class="pa-4">
+                <MudButton Color="Color.Primary" OnClick="LoadEmployees">Load next @AppState.ItemsPerPage employees</MudButton>
+                <MudButton Color="Color.Default" OnClick="@(() => { AppState.LastEmployeeId = null; LoadEmployees(); })">Back to first page</MudButton>
+            </MudPaper>
+        }
     }
     else
     {
@@ -100,7 +103,7 @@
         AppState.OnFiltersChange += LoadEmployees;
         LoadEmployees();
     }
-    
+
     void Dispose()
     {
         Logger.LogInformation("Disposing");
