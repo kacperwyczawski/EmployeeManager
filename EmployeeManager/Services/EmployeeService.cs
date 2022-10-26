@@ -31,6 +31,10 @@ public class EmployeeService
             .OrderBy(e => e.EmpNo)
             .Where(e => e.EmpNo > lastId)
             .Include(e => e.Salaries)
+            .Include(e => e.DeptEmps)
+            .ThenInclude(de => de.DeptNoNavigation)
+            .Include(e => e.DeptManagers)
+            .ThenInclude(dm => dm.DeptNoNavigation)
             .AsQueryable();
 
         if (_appState.GenderFilter.GetAllowedValue(out var allowedGender))
@@ -39,7 +43,11 @@ public class EmployeeService
 
         if (_appState.DepartmentFilter.GetAllowedValue(out var allowedDepartment))
             employees = employees.Where(e =>
-                _departmentService.GetDepartmentName(e.EmpNo) == allowedDepartment);
+                (e.DeptEmps.OrderByDescending(de => de.ToDate).Any()
+                 && e.DeptEmps.OrderByDescending(de => de.ToDate).First().DeptNo == allowedDepartment)
+                || // employee can be manager or just employee in department
+                (e.DeptManagers.OrderByDescending(dm => dm.ToDate).Any()
+                 && e.DeptManagers.OrderByDescending(dm => dm.ToDate).First().DeptNo == allowedDepartment));
 
         if (_appState.SalaryFilter.GetAllowedValue(out var allowedSalary))
             employees = employees.Where(e =>
@@ -54,7 +62,9 @@ public class EmployeeService
             FirstName: e.FirstName,
             LastName: e.LastName,
             IsMale: e.Gender == "M",
-            DepartmentName: _departmentService.GetDepartmentName(e.EmpNo),
+            DepartmentName: e.DeptEmps.Any()
+                ? e.DeptEmps.OrderByDescending(de => de.ToDate).First().DeptNoNavigation.DeptName
+                : e.DeptManagers.OrderByDescending(dm => dm.ToDate).First().DeptNoNavigation.DeptName,
             JobTitle: _titleService.GetTitleName(e.EmpNo),
             Salary: e.Salaries.OrderByDescending(s => s.ToDate).First().Salary1
         ));

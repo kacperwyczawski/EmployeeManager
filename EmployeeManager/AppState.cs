@@ -19,7 +19,7 @@ public class AppState
 
     public Filter<string> GenderFilter { get; set; } = new("M");
 
-    public Filter<string> DepartmentFilter { get; set; } = new("Customer Service");
+    public Filter<string> DepartmentFilter { get; set; } = new("d009");
 
     public Filter<SalaryRange> SalaryFilter { get; set; } = new(new SalaryRange(12000, 18000));
     
