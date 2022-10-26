@@ -15,7 +15,6 @@ builder.Services.AddDbContext<EmployeeManagerContext>(
     options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddMudServices();
 builder.Services.AddScoped<EmployeeService>();
-builder.Services.AddScoped<SalaryService>();
 builder.Services.AddScoped<DepartmentService>();
 builder.Services.AddScoped<TitleService>();
 builder.Services.AddScoped<AppState>();

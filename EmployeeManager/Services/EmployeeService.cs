@@ -9,16 +9,14 @@ public class EmployeeService
     private readonly EmployeeManagerContext _context;
     private readonly DepartmentService _departmentService;
     private readonly TitleService _titleService;
-    private readonly SalaryService _salaryService;
     private readonly AppState _appState;
 
     public EmployeeService(EmployeeManagerContext context, DepartmentService departmentService,
-        TitleService titleService, SalaryService salaryService, AppState appState)
+        TitleService titleService, AppState appState)
     {
         _context = context;
         _departmentService = departmentService;
         _titleService = titleService;
-        _salaryService = salaryService;
         _appState = appState;
     }
 
@@ -31,7 +29,9 @@ public class EmployeeService
         var employees = _context.Employees
             .AsNoTracking()
             .OrderBy(e => e.EmpNo)
-            .Where(e => e.EmpNo > lastId);
+            .Where(e => e.EmpNo > lastId)
+            .Include(e => e.Salaries)
+            .AsQueryable();
 
         if (_appState.GenderFilter.GetAllowedValue(out var allowedGender))
             employees = employees.Where(e =>
@@ -43,8 +43,8 @@ public class EmployeeService
 
         if (_appState.SalaryFilter.GetAllowedValue(out var allowedSalary))
             employees = employees.Where(e =>
-                _salaryService.GetSalaryValue(e.EmpNo) >= allowedSalary.From &&
-                _salaryService.GetSalaryValue(e.EmpNo) <= allowedSalary.To);
+                e.Salaries.OrderByDescending(s => s.ToDate).First().Salary1 >= allowedSalary.From &&
+                e.Salaries.OrderByDescending(s => s.ToDate).First().Salary1 <= allowedSalary.To);
 
         employees = employees.Take(amount);
 
@@ -56,7 +56,7 @@ public class EmployeeService
             IsMale: e.Gender == "M",
             DepartmentName: _departmentService.GetDepartmentName(e.EmpNo),
             JobTitle: _titleService.GetTitleName(e.EmpNo),
-            Salary: _salaryService.GetSalaryValue(e.EmpNo)
+            Salary: e.Salaries.OrderByDescending(s => s.ToDate).First().Salary1
         ));
     }
 
