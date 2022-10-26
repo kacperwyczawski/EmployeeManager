@@ -1,4 +1,6 @@
-﻿@inject AppState AppState
+﻿@using EmployeeManager.Services
+@inject AppState AppState
+@inject DepartmentService DepartmentService
 
 <MudDialog>
     <DialogContent>
@@ -23,15 +25,10 @@
             @if (AppState.DepartmentFilter.IsActive)
             {
                 <MudSelect @bind-Value="AppState.DepartmentFilter.AllowedValue">
-                    <MudSelectItem Value="@("Customer Service")"/>
-                    <MudSelectItem Value="@("Development")"/>
-                    <MudSelectItem Value="@("Finance")"/>
-                    <MudSelectItem Value="@("Human Resources")"/>
-                    <MudSelectItem Value="@("Marketing")"/>
-                    <MudSelectItem Value="@("Production")"/>
-                    <MudSelectItem Value="@("Quality Management")"/>
-                    <MudSelectItem Value="@("Research")"/>
-                    <MudSelectItem Value="@("Sales")"/>
+                    @foreach(var department in DepartmentService.GetDepartments())
+                    {
+                        <MudSelectItem Value="@department.DeptNo">@department.DeptName</MudSelectItem>
+                    }
                 </MudSelect>
             }
 
