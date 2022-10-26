@@ -27,7 +27,7 @@ public class EmployeeService
         var amount = _appState.ItemsPerPage;
 
         var lastId = _appState.LastEmployeeId ?? 0;
-        
+
         var employees = _context.Employees
             .AsNoTracking()
             .OrderBy(e => e.EmpNo)
@@ -35,7 +35,7 @@ public class EmployeeService
 
         if (_appState.GenderFilter.GetAllowedValue(out var allowedGender))
             employees = employees.Where(e =>
-                e.Gender == allowedGender.ToString());
+                e.Gender == allowedGender);
 
         if (_appState.DepartmentFilter.GetAllowedValue(out var allowedDepartment))
             employees = employees.Where(e =>
@@ -47,9 +47,9 @@ public class EmployeeService
                 _salaryService.GetSalaryValue(e.EmpNo) <= allowedSalary.To);
 
         employees = employees.Take(amount);
-        
+
         _appState.LastEmployeeId = employees.Last().EmpNo;
-        
+
         return employees.ToList().Select(e => new EmployeeView(
             FirstName: e.FirstName,
             LastName: e.LastName,
