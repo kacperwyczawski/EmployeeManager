@@ -33,8 +33,6 @@ public class EmployeeService
             .OrderBy(e => e.EmpNo)
             .Where(e => e.EmpNo > lastId);
 
-        // TODO: make loop, when amount is reached, break
-
         if (_appState.GenderFilter.IsActive)
             employees = employees.Where(e =>
                 e.Gender[0] == _appState.GenderFilter.AllowedValue);
