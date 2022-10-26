@@ -1,4 +1,6 @@
 ﻿@using EmployeeManager.Services
+@using System.Collections
+@using EmployeeManager.Models
 @inject AppState AppState
 @inject DepartmentService DepartmentService
 
@@ -25,7 +27,7 @@
             @if (AppState.DepartmentFilter.IsActive)
             {
                 <MudSelect @bind-Value="AppState.DepartmentFilter.AllowedValue">
-                    @foreach(var department in DepartmentService.GetDepartments())
+                    @foreach(var department in _departments)
                     {
                         <MudSelectItem Value="@department.DeptNo">@department.DeptName</MudSelectItem>
                     }
@@ -63,5 +65,13 @@
     {
         MudDialog.Close(DialogResult.Ok(true));
         AppState.NotifyFiltersChanged();
+    }
+
+    IEnumerable<Department> _departments = null!;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        _departments = DepartmentService.GetDepartments();
     }
 }
