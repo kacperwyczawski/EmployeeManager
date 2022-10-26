@@ -14,7 +14,7 @@ const string connectionString = "server=localhost;database=employees;user=root;p
 builder.Services.AddDbContext<EmployeeManagerContext>(
     options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 builder.Services.AddMudServices();
-builder.Services.AddScoped<EmployeeViewService>();
+builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddScoped<SalaryService>();
 builder.Services.AddScoped<DepartmentService>();
 builder.Services.AddScoped<TitleService>();

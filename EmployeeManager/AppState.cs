@@ -11,6 +11,11 @@ public class AppState
     }
 
     public int ItemsPerPage { get; set; }
+    
+    /// <summary>
+    /// Used for keyset pagination
+    /// </summary>
+    public int? LastEmployeeId { get; set; }
 
     public Filter<char> GenderFilter { get; set; } = new('M');
 

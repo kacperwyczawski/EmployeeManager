@@ -1,7 +1,7 @@
 ﻿@page "/"
 @using EmployeeManager.Services
 @using EmployeeManager.ViewModels
-@inject EmployeeViewService EmployeeService
+@inject EmployeeService EmployeeService
 @inject ILogger<Index> Logger
 @inject AppState AppState
 @inject IDialogService DialogService
@@ -50,10 +50,6 @@
 
     @if (_employees is not null && _employees.Any())
     {
-        <MudPaper Class="pa-4 d-flex justify-center">
-            <MudPagination Count="@TotalPages" SelectedChanged="@ChangePage"/>
-        </MudPaper>
-
         <MudPaper Class="pa-4">
             <MudStack>
                 @foreach (var employee in _employees)
@@ -72,11 +68,15 @@
                 }
             </MudStack>
         </MudPaper>
+        
+        <MudPaper Class="pa-4">
+            <MudButton Color="Color.Primary" OnClick="LoadEmployees">Load next @AppState.ItemsPerPage employees</MudButton>
+        </MudPaper>
     }
     else
     {
         <MudPaper Class="pa-4">
-            <MudButton Color="Color.Primary" OnClick="LoadEmployees">Load Employees</MudButton>
+            <MudButton Color="Color.Primary" OnClick="LoadEmployees">Load @AppState.ItemsPerPage employees</MudButton>
         </MudPaper>
     }
 
@@ -84,18 +84,11 @@
 
 @code
 {
-    int _selectedPage = 1;
-
     IEnumerable<EmployeeView>? _employees;
-
-    int TotalPages => EmployeeService.GetEmployeesCount() / AppState.ItemsPerPage + 1;
-
-    int Offset => (_selectedPage - 1) * AppState.ItemsPerPage;
 
     void LoadEmployees()
     {
-        Logger.LogInformation("Loading employees (page {Page}, offset {Offset})", _selectedPage, Offset);
-        _employees = EmployeeService.GetEmployees(Offset, AppState.ItemsPerPage);
+        _employees = EmployeeService.GetEmployees(); 
     }
 
     void UnloadEmployees()
@@ -103,13 +96,6 @@
         Logger.LogInformation("Unloading employees");
         _employees = null;
         StateHasChanged();
-    }
-
-    private void ChangePage(int page)
-    {
-        Logger.LogInformation("Changing page to {Page}", page);
-        _selectedPage = page;
-        LoadEmployees();
     }
 
     protected override void OnInitialized()
