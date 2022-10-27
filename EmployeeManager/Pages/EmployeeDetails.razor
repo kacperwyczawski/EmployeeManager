@@ -1,0 +1,22 @@
+﻿@page "/EmployeeDetails/{id:int}"
+@using EmployeeManager.Models
+@using EmployeeManager.Services
+@inject EmployeeService EmployeeService
+
+<MudPaper Class="pa-4">
+    <MudText Typo="Typo.h4">@_employee.FirstName @_employee.LastName</MudText>
+</MudPaper>
+
+@code
+{
+    [Parameter]
+    public int Id { get; set; }
+
+    Employee _employee;
+
+    protected override void OnInitialized()
+    {
+        _employee = EmployeeService.GetEmployee(Id)
+                    ?? throw new InvalidOperationException($"Employee with id {Id} not found.");
+    }
+}

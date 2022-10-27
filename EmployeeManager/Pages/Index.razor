@@ -9,6 +9,7 @@
 @inject DepartmentService DepartmentService
 @inject SalaryService SalaryService
 @inject IJSRuntime JsRuntime
+@inject NavigationManager NavigationManager
 
 <PageTitle>Employee Manager</PageTitle>
 
@@ -29,7 +30,7 @@
                 OnClick="@(() => { isExporting = false; _employeesToExport.Clear(); })">
                 Cancel
             </MudButton>
-            <MudButton 
+            <MudButton
                 StartIcon="@Icons.Filled.FileDownload"
                 OnClick="Export">
                 Export
@@ -108,6 +109,12 @@
                                  Color="@(employee.IsCurrentEmployee ? Color.Warning : Color.Default)"/>
                         <MudText>@employee.DepartmentName</MudText>
 
+                        <MudSpacer/>
+
+                        <MudIconButton
+                            Size="Size.Small" Icon="@Icons.Filled.MoreVert"
+                            OnClick="@(() => NavigationManager.NavigateTo("/EmployeeDetails/" + employee.Id))"/>
+
                     </MudStack>
                 }
             </MudStack>
@@ -175,7 +182,7 @@
     void Export()
     {
         Logger.LogInformation("Exporting {Count} employees", _employeesToExport.Count);
-        
+
         var exportData = new
         {
             Employees = _employeesToExport.Select(employeeView => new
@@ -188,11 +195,11 @@
                 SalarySum = SalaryService.GetSumOfSalaries(employeeView.Id)
             })
         };
-        
+
         var json = JsonSerializer.Serialize(exportData);
-        
+
         JsRuntime.InvokeAsync<object>("saveFile", "employees.json", json);
-        
+
         _employeesToExport.Clear();
         isExporting = false;
     }

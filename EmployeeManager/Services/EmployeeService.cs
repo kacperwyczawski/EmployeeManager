@@ -1,4 +1,5 @@
 ﻿using EmployeeManager.Data;
+using EmployeeManager.Models;
 using EmployeeManager.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,7 +26,7 @@ public class EmployeeService
         var amount = _appState.ItemsPerPage;
 
         var lastId = _appState.LastEmployeeId ?? 0;
-        
+
         var infiniteDate = new DateOnly(9999, 1, 1);
 
         var employees = _context.Employees
@@ -58,10 +59,10 @@ public class EmployeeService
             employees = employees.Where(e =>
                 e.Salaries.OrderByDescending(s => s.ToDate).First().Salary1 >= allowedSalary.From &&
                 e.Salaries.OrderByDescending(s => s.ToDate).First().Salary1 <= allowedSalary.To);
-        
+
         // current employee filter
         if (_appState.CurrentEmployeeFilter.GetAllowedValue(out var isCurrentEmployee))
-            employees = employees.Where(e => 
+            employees = employees.Where(e =>
                 // ReSharper disable once ArrangeRedundantParentheses
                 (e.Salaries.OrderByDescending(s => s.ToDate).First().ToDate == infiniteDate) == isCurrentEmployee);
 
@@ -83,5 +84,11 @@ public class EmployeeService
         ));
     }
 
-    public int GetEmployeesCount() => _context.Employees.Count();
+    public Employee? GetEmployee(int id) => _context.Employees
+        .AsNoTracking()
+        .Include(e => e.DeptEmps)
+        .ThenInclude(de => de.DeptNoNavigation)
+        .Include(e => e.DeptManagers)
+        .ThenInclude(dm => dm.DeptNoNavigation)
+        .SingleOrDefault(e => e.EmpNo == id);
 }
