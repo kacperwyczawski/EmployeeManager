@@ -45,6 +45,17 @@
                                  Label="To" Min="0" Max="200000"/>
             }
 
+            @* Current/former employee *@
+            <MudSwitch @bind-Checked="AppState.CurrentEmployeeFilter.IsActive"
+                       Label="Filter current/former employee" Color="Color.Primary"/>
+            @if (AppState.CurrentEmployeeFilter.IsActive)
+            {
+                <MudRadioGroup @bind-SelectedOption="AppState.CurrentEmployeeFilter.AllowedValue">
+                    <MudRadio Option="@true" Color="Color.Success">Current</MudRadio>
+                    <MudRadio Option="@false" Color="Color.Error">Former</MudRadio>
+                </MudRadioGroup>
+            }
+            
         </MudStack>
     </DialogContent>
     <DialogActions>
