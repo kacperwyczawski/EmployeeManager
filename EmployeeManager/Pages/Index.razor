@@ -2,6 +2,7 @@
 @using EmployeeManager.Services
 @using EmployeeManager.ViewModels
 @using System.Text.Json
+@using EmployeeManager.Models
 @inject EmployeeService EmployeeService
 @inject ILogger<Index> Logger
 @inject AppState AppState
@@ -58,17 +59,25 @@
             <MudStack>
                 @foreach (var employee in _employees)
                 {
-                    <MudStack Row="true">
+                    <MudStack Row="true" AlignItems="AlignItems.Center">
+                        
                         <MudIcon Size="Size.Small" Icon="@(employee.IsMale ? Icons.Filled.Male : Icons.Filled.Female)"
-                                 Color="@(employee.IsMale ? Color.Tertiary : Color.Secondary)"/>
-                        <MudText>
+                                 Color="@GenderIconColor(employee)"/>
+                        
+                        <MudText Style="@(employee.IsCurrentEmployee ? "" : "opacity: 0.5;")">
                             @employee.JobTitle <strong>@employee.FirstName @employee.LastName</strong>
                         </MudText>
-                        <MudIcon Size="Size.Small" Icon="@Icons.Filled.AttachMoney" Color="Color.Success"/>
+                        
+                        <MudIcon Size="Size.Small" Icon="@Icons.Filled.AttachMoney"
+                                 Color="@(employee.IsCurrentEmployee ? Color.Success : Color.Default)"/>
                         <MudText>@employee.Salary</MudText>
-                        <MudIcon Size="Size.Small" Icon="@Icons.Filled.Assignment" Color="Color.Warning"/>
+                        
+                        <MudIcon Size="Size.Small" Icon="@Icons.Filled.Assignment"
+                                 Color="@(employee.IsCurrentEmployee ? Color.Warning : Color.Default)"/>
                         <MudText>@employee.DepartmentName</MudText>
+                        
                         <MudSpacer/>
+                        
                         <MudIconButton Size="Size.Small" Icon="@Icons.Filled.FileDownload"
                                        OnClick="@(() => Export(employee))"/>
                     </MudStack>
@@ -95,6 +104,13 @@
 
 @code
 {
+    static Color GenderIconColor(EmployeeView employee) => (employee.IsCurrentEmployee, employee.IsMale) switch
+    { 
+        (false, _) => Color.Default,
+        (true, true) => Color.Tertiary, 
+        (true, false) => Color.Secondary
+        };
+
     IEnumerable<EmployeeView>? _employees;
 
     void LoadEmployees()

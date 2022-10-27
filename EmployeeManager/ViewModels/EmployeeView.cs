@@ -7,4 +7,5 @@ public record EmployeeView(
     string JobTitle,
     int Salary,
     bool IsMale,
+    bool IsCurrentEmployee,
     int Id);

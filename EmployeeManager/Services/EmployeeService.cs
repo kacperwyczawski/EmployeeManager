@@ -25,6 +25,8 @@ public class EmployeeService
         var amount = _appState.ItemsPerPage;
 
         var lastId = _appState.LastEmployeeId ?? 0;
+        
+        var infiniteDate = new DateOnly(9999, 1, 1);
 
         var employees = _context.Employees
             .AsNoTracking()
@@ -67,6 +69,7 @@ public class EmployeeService
                 : e.DeptManagers.OrderByDescending(dm => dm.ToDate).First().DeptNoNavigation.DeptName,
             JobTitle: _titleService.GetTitleName(e.EmpNo),
             Salary: e.Salaries.OrderByDescending(s => s.ToDate).First().Salary1,
+            IsCurrentEmployee: e.Salaries.OrderByDescending(s => s.ToDate).First().ToDate == infiniteDate,
             Id: e.EmpNo
         ));
     }
