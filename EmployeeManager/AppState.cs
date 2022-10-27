@@ -11,7 +11,7 @@ public class AppState
     }
 
     public int ItemsPerPage { get; set; }
-    
+
     /// <summary>
     /// Used for keyset pagination
     /// </summary>
@@ -22,7 +22,12 @@ public class AppState
     public Filter<string> DepartmentFilter { get; set; } = new("d009");
 
     public Filter<SalaryRange> SalaryFilter { get; set; } = new(new SalaryRange(60_000, 70_000));
-    
+
+    /// <summary>
+    /// If true, only current employees are allowed, otherwise only former employees are allowed
+    /// </summary>
+    public Filter<bool> CurrentEmployeeFilter { get; set; } = new(true);
+
     public event Action? OnFiltersChange;
 
     public void ResetToDefaults()
@@ -98,7 +103,7 @@ public class AppState
                 _to = value;
             }
         }
-        
+
         public override string ToString() => $"{From} - {To}";
     }
 }
