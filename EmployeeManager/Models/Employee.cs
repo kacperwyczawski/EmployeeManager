@@ -8,7 +8,7 @@ namespace EmployeeManager.Models
     {
         public Employee()
         {
-            DeptEmps = new HashSet<DeptEmp>();
+            DeptEmps = new HashSet<Job>();
             DeptManagers = new HashSet<DeptManager>();
             Salaries = new HashSet<Salary>();
             Titles = new HashSet<Title>();
@@ -31,7 +31,7 @@ namespace EmployeeManager.Models
         public DateOnly HireDate { get; set; }
 
         [InverseProperty("EmpNoNavigation")]
-        public ICollection<DeptEmp> DeptEmps { get; set; }
+        public ICollection<Job> DeptEmps { get; set; }
         [InverseProperty("EmpNoNavigation")]
         public ICollection<DeptManager> DeptManagers { get; set; }
         [InverseProperty("EmpNoNavigation")]

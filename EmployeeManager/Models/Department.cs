@@ -10,7 +10,7 @@ namespace EmployeeManager.Models
     {
         public Department()
         {
-            DeptEmps = new HashSet<DeptEmp>();
+            DeptEmps = new HashSet<Job>();
             DeptManagers = new HashSet<DeptManager>();
         }
 
@@ -23,7 +23,7 @@ namespace EmployeeManager.Models
         public string DeptName { get; set; } = null!;
 
         [InverseProperty("DeptNoNavigation")]
-        public virtual ICollection<DeptEmp> DeptEmps { get; set; }
+        public virtual ICollection<Job> DeptEmps { get; set; }
         [InverseProperty("DeptNoNavigation")]
         public virtual ICollection<DeptManager> DeptManagers { get; set; }
     }

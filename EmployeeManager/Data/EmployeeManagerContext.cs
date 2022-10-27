@@ -15,7 +15,7 @@ namespace EmployeeManager.Data
 
         public DbSet<CurrentDeptEmp> CurrentDeptEmps { get; set; } = null!;
         public DbSet<Department> Departments { get; set; } = null!;
-        public DbSet<DeptEmp> DeptEmps { get; set; } = null!;
+        public DbSet<Job> DeptEmps { get; set; } = null!;
         public DbSet<DeptEmpLatestDate> DeptEmpLatestDates { get; set; } = null!;
         public DbSet<DeptManager> DeptManagers { get; set; } = null!;
         public DbSet<Employee> Employees { get; set; } = null!;
@@ -42,7 +42,7 @@ namespace EmployeeManager.Data
                 entity.Property(e => e.DeptNo).IsFixedLength();
             });
 
-            modelBuilder.Entity<DeptEmp>(entity =>
+            modelBuilder.Entity<Job>(entity =>
             {
                 entity.HasKey(e => new { e.EmpNo, e.DeptNo })
                     .HasName("PRIMARY")

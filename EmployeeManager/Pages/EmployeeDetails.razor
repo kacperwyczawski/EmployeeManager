@@ -7,6 +7,18 @@
     <MudText Typo="Typo.h4">@_employee.FirstName @_employee.LastName</MudText>
 </MudPaper>
 
+<MudPaper Class="pa-4 mt-4">
+    <MudTimeline TimelinePosition="TimelinePosition.Start">
+        @foreach(var job in _jobs)
+        {
+            <MudTimelineItem Color="@(job.ToDate == _infiniteDate ? Color.Primary : Color.Default)">
+                    <MudText Typo="Typo.h6">@job.DeptNoNavigation.DeptName</MudText>
+                    <MudText>@job.FromDate - @(job.ToDate == _infiniteDate ? "now" : job.ToDate)</MudText>
+            </MudTimelineItem>
+        }
+    </MudTimeline>
+</MudPaper>
+
 @code
 {
     [Parameter]
@@ -14,9 +26,15 @@
 
     Employee _employee;
 
+    readonly DateOnly _infiniteDate = new(9999, 1, 1);
+    
+    IEnumerable<IJob> _jobs = Enumerable.Empty<IJob>();
+
     protected override void OnInitialized()
     {
         _employee = EmployeeService.GetEmployee(Id)
                     ?? throw new InvalidOperationException($"Employee with id {Id} not found.");
+        
+        _jobs = _employee.DeptEmps.Concat<IJob>(_employee.DeptManagers).OrderBy(emp => emp.FromDate);
     }
 }

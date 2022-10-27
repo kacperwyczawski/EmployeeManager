@@ -6,7 +6,7 @@ namespace EmployeeManager.Models
 {
     [Table("dept_emp")]
     [Index("DeptNo", Name = "dept_no")]
-    public class DeptEmp
+    public class Job : IJob
     {
         [Key]
         [Column("emp_no")]
