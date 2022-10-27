@@ -22,7 +22,8 @@
         <MudIconButton Icon="@Icons.Filled.Settings" OnClick="@(() => DialogService.Show<Settings>("Settings"))"/>
     </MudPaper>
 
-    @if (AppState.DepartmentFilter.IsActive || AppState.GenderFilter.IsActive || AppState.SalaryFilter.IsActive)
+    @if (AppState.DepartmentFilter.IsActive || AppState.GenderFilter.IsActive
+         || AppState.SalaryFilter.IsActive || AppState.CurrentEmployeeFilter.IsActive)
     {
         <MudPaper Class="pa-4 d-flex align-center gap-4">
             <MudText>Filters:</MudText>
