@@ -36,6 +36,7 @@ public class AppState
         GenderFilter.IsActive = false;
         DepartmentFilter.IsActive = false;
         SalaryFilter.IsActive = false;
+        CurrentEmployeeFilter.IsActive = false;
     }
 
     public class Filter<T>
