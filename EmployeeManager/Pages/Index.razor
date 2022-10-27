@@ -50,6 +50,14 @@
                     Salary range: @salary
                 </MudChip>
             }
+            
+            @if (AppState.CurrentEmployeeFilter.GetAllowedValue(out var isCurrentEmployee))
+            {
+                <MudChip Color="Color.Info"
+                         OnClose="@(() => { AppState.CurrentEmployeeFilter.IsActive = false; LoadEmployees(); })">
+                    Employees: @(isCurrentEmployee ? "Current" : "Former")
+                </MudChip>
+            }
         </MudPaper>
     }
 
