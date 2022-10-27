@@ -39,10 +39,12 @@ public class EmployeeService
             .ThenInclude(dm => dm.DeptNoNavigation)
             .AsQueryable();
 
+        // gender filter
         if (_appState.GenderFilter.GetAllowedValue(out var allowedGender))
             employees = employees.Where(e =>
                 e.Gender == allowedGender);
 
+        // department filter
         if (_appState.DepartmentFilter.GetAllowedValue(out var allowedDepartment))
             employees = employees.Where(e =>
                 (e.DeptEmps.OrderByDescending(de => de.ToDate).Any()
@@ -51,10 +53,17 @@ public class EmployeeService
                 (e.DeptManagers.OrderByDescending(dm => dm.ToDate).Any()
                  && e.DeptManagers.OrderByDescending(dm => dm.ToDate).First().DeptNo == allowedDepartment));
 
+        // salary filter
         if (_appState.SalaryFilter.GetAllowedValue(out var allowedSalary))
             employees = employees.Where(e =>
                 e.Salaries.OrderByDescending(s => s.ToDate).First().Salary1 >= allowedSalary.From &&
                 e.Salaries.OrderByDescending(s => s.ToDate).First().Salary1 <= allowedSalary.To);
+        
+        // current employee filter
+        if (_appState.CurrentEmployeeFilter.GetAllowedValue(out var isCurrentEmployee))
+            employees = employees.Where(e => 
+                // ReSharper disable once ArrangeRedundantParentheses
+                (e.Salaries.OrderByDescending(s => s.ToDate).First().ToDate == infiniteDate) == isCurrentEmployee);
 
         employees = employees.Take(amount);
 
