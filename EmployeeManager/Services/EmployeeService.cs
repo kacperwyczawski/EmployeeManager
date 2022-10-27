@@ -90,5 +90,6 @@ public class EmployeeService
         .ThenInclude(de => de.DeptNoNavigation)
         .Include(e => e.DeptManagers)
         .ThenInclude(dm => dm.DeptNoNavigation)
+        .Include(e => e.Salaries)
         .SingleOrDefault(e => e.EmpNo == id);
 }

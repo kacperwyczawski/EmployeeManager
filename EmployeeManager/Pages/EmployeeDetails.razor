@@ -3,17 +3,40 @@
 @using EmployeeManager.Services
 @inject EmployeeService EmployeeService
 
-<MudPaper Class="pa-4">
+<MudPaper Class="pa-4 d-flex align-center gap-1">
+    <MudIcon Icon="@Icons.Filled.AccountBox" Color="Color.Primary" Size="Size.Large"/>
     <MudText Typo="Typo.h4">@_employee.FirstName @_employee.LastName</MudText>
+</MudPaper>
+
+<MudPaper Class="pa-4 mt-4 d-flex align-center gap-1">
+    <MudIcon Icon="@Icons.Filled.Assignment" Color="Color.Secondary"/>
+    <MudText Typo="Typo.h5">Departments:</MudText>
 </MudPaper>
 
 <MudPaper Class="pa-4 mt-4">
     <MudTimeline TimelinePosition="TimelinePosition.Start">
-        @foreach(var job in _jobs)
+        @foreach (var job in _jobs)
         {
-            <MudTimelineItem Color="@(job.ToDate == _infiniteDate ? Color.Primary : Color.Default)">
-                    <MudText Typo="Typo.h6">@job.DeptNoNavigation.DeptName</MudText>
-                    <MudText>@job.FromDate - @(job.ToDate == _infiniteDate ? "now" : job.ToDate)</MudText>
+            <MudTimelineItem Color="@(job.ToDate == _infiniteDate ? Color.Secondary : Color.Default)">
+                <MudText Typo="Typo.h6">@job.DeptNoNavigation.DeptName</MudText>
+                <MudText>@job.FromDate - @(job.ToDate == _infiniteDate ? "now" : job.ToDate)</MudText>
+            </MudTimelineItem>
+        }
+    </MudTimeline>
+</MudPaper>
+
+<MudPaper Class="pa-4 mt-4 d-flex align-center gap-1">
+    <MudIcon Icon="@Icons.Filled.AttachMoney" Color="Color.Success"/>
+    <MudText Typo="Typo.h5">Salaries:</MudText>
+</MudPaper>
+
+<MudPaper Class="pa-4 mt-4">
+    <MudTimeline TimelinePosition="TimelinePosition.Start">
+        @foreach (var salary in _employee.Salaries)
+        {
+            <MudTimelineItem Color="@(salary.ToDate == _infiniteDate ? Color.Success : Color.Default)">
+                <MudText Typo="Typo.h6">$@salary.Salary1</MudText>
+                <MudText>@salary.FromDate - @(salary.ToDate == _infiniteDate ? "now" : salary.ToDate)</MudText>
             </MudTimelineItem>
         }
     </MudTimeline>
@@ -27,14 +50,14 @@
     Employee _employee;
 
     readonly DateOnly _infiniteDate = new(9999, 1, 1);
-    
+
     IEnumerable<IJob> _jobs = Enumerable.Empty<IJob>();
 
     protected override void OnInitialized()
     {
         _employee = EmployeeService.GetEmployee(Id)
                     ?? throw new InvalidOperationException($"Employee with id {Id} not found.");
-        
+
         _jobs = _employee.DeptEmps.Concat<IJob>(_employee.DeptManagers).OrderBy(emp => emp.FromDate);
     }
 }
