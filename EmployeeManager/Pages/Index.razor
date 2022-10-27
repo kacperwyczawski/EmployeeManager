@@ -113,7 +113,7 @@
             </MudStack>
         </MudPaper>
 
-        @if (_employees.Count() >= AppState.ItemsPerPage)
+        @if (_employees.Count() >= AppState.ItemsPerPage && !isExporting)
         {
             <MudPaper Class="pa-4">
                 <MudButton Color="Color.Primary" OnClick="LoadEmployees">Load next @AppState.ItemsPerPage employees</MudButton>
