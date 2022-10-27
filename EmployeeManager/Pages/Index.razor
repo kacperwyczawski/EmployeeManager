@@ -2,7 +2,6 @@
 @using EmployeeManager.Services
 @using EmployeeManager.ViewModels
 @using System.Text.Json
-@using EmployeeManager.Models
 @inject EmployeeService EmployeeService
 @inject ILogger<Index> Logger
 @inject AppState AppState
@@ -19,6 +18,23 @@
         <MudIcon Icon="@Icons.Filled.PermContactCalendar" Size="Size.Large" Color="Color.Primary"/>
         <MudText Typo="Typo.h4">Employee Manager</MudText>
         <MudSpacer/>
+        @if (!isExporting)
+        {
+            <MudIconButton Icon="@Icons.Filled.FileDownload" OnClick="@(() => isExporting = true)"/>
+        }
+        else
+        {
+            <MudButton
+                StartIcon="@Icons.Filled.Close"
+                OnClick="@(() => { isExporting = false; _employeesToExport.Clear(); })">
+                Cancel
+            </MudButton>
+            <MudButton 
+                StartIcon="@Icons.Filled.FileDownload"
+                OnClick="Export">
+                Export
+            </MudButton>
+        }
         <MudIconButton Icon="@Icons.Filled.Settings" OnClick="@(() => DialogService.Show<Settings>("Settings"))"/>
     </MudPaper>
 
@@ -51,7 +67,7 @@
                     Salary range: @salary
                 </MudChip>
             }
-            
+
             @if (AppState.CurrentEmployeeFilter.GetAllowedValue(out var isCurrentEmployee))
             {
                 <MudChip Color="Color.Info"
@@ -69,26 +85,29 @@
                 @foreach (var employee in _employees)
                 {
                     <MudStack Row="true" AlignItems="AlignItems.Center">
-                        
+
+                        @if (isExporting)
+                        {
+                            <MudCheckBox
+                                Dense="true" Class="ma-n1"
+                                CheckedChanged="@(new Action<bool>(isChecked => ToggleIncludeInExport(isChecked, employee)))"/>
+                        }
+
                         <MudIcon Size="Size.Small" Icon="@(employee.IsMale ? Icons.Filled.Male : Icons.Filled.Female)"
                                  Color="@GenderIconColor(employee)"/>
-                        
+
                         <MudText Style="@(employee.IsCurrentEmployee ? "" : "opacity: 0.5;")">
                             @employee.JobTitle <strong>@employee.FirstName @employee.LastName</strong>
                         </MudText>
-                        
+
                         <MudIcon Size="Size.Small" Icon="@Icons.Filled.AttachMoney"
                                  Color="@(employee.IsCurrentEmployee ? Color.Success : Color.Default)"/>
                         <MudText>@employee.Salary</MudText>
-                        
+
                         <MudIcon Size="Size.Small" Icon="@Icons.Filled.Assignment"
                                  Color="@(employee.IsCurrentEmployee ? Color.Warning : Color.Default)"/>
                         <MudText>@employee.DepartmentName</MudText>
-                        
-                        <MudSpacer/>
-                        
-                        <MudIconButton Size="Size.Small" Icon="@Icons.Filled.FileDownload"
-                                       OnClick="@(() => Export(employee))"/>
+
                     </MudStack>
                 }
             </MudStack>
@@ -113,6 +132,8 @@
 
 @code
 {
+    bool isExporting;
+
     static Color GenderIconColor(EmployeeView employee) => (employee.IsCurrentEmployee, employee.IsMale) switch
     { 
         (false, _) => Color.Default,
@@ -121,6 +142,16 @@
         };
 
     IEnumerable<EmployeeView>? _employees;
+
+    List<EmployeeView> _employeesToExport = new();
+
+    void ToggleIncludeInExport(bool isChecked, EmployeeView employee)
+    {
+        if (isChecked)
+            _employeesToExport.Add(employee);
+        else
+            _employeesToExport.Remove(employee);
+    }
 
     void LoadEmployees()
     {
@@ -141,24 +172,28 @@
         AppState.OnFiltersChange -= LoadEmployees;
     }
 
-    void Export(EmployeeView employeeView)
+    void Export()
     {
-        Logger.LogInformation("Exporting employee #{Id} ({FirstName} {LastName})",
-            employeeView.Id, employeeView.FirstName, employeeView.LastName);
-
-        var salarySum = SalaryService.GetSumOfSalaries(employeeView.Id);
+        Logger.LogInformation("Exporting {Count} employees", _employeesToExport.Count);
+        
         var exportData = new
         {
-            employeeView.FirstName,
-            employeeView.LastName,
-            employeeView.JobTitle,
-            employeeView.DepartmentName,
-            employeeView.Salary,
-            SalarySum = salarySum
+            Employees = _employeesToExport.Select(employeeView => new
+            {
+                employeeView.FirstName,
+                employeeView.LastName,
+                employeeView.JobTitle,
+                employeeView.DepartmentName,
+                employeeView.Salary,
+                SalarySum = SalaryService.GetSumOfSalaries(employeeView.Id)
+            })
         };
+        
         var json = JsonSerializer.Serialize(exportData);
-
-        JsRuntime.InvokeAsync<object>("saveFile",
-            $"{employeeView.FirstName}_{employeeView.LastName}.json", json);
+        
+        JsRuntime.InvokeAsync<object>("saveFile", "employees.json", json);
+        
+        _employeesToExport.Clear();
+        isExporting = false;
     }
 }
