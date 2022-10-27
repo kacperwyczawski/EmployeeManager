@@ -9,10 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 
-// TODO: move to secrets
-const string connectionString = "server=localhost;database=employees;user=root;password=113971";
 builder.Services.AddDbContext<EmployeeManagerContext>(
-    options => options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+    options => options.UseMySql(builder.Configuration.GetConnectionString("DefaultConnection"),
+        ServerVersion.AutoDetect(builder.Configuration.GetConnectionString("DefaultConnection"))));
 builder.Services.AddMudServices();
 builder.Services.AddScoped<EmployeeService>();
 builder.Services.AddScoped<DepartmentService>();
