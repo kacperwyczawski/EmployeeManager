@@ -170,6 +170,7 @@
     {
         Logger.LogInformation("Initializing");
         AppState.OnFiltersChange += LoadEmployees;
+        AppState.LastEmployeeId = null;
         LoadEmployees();
     }
 
