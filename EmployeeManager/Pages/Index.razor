@@ -47,7 +47,7 @@
             @if (AppState.GenderFilter.GetAllowedValue(out var gender))
             {
                 <MudChip Color="@(gender == "M" ? Color.Tertiary : Color.Secondary)"
-                         OnClose="@(() => { AppState.GenderFilter.IsActive = false; LoadEmployees(); })">
+                         OnClose="@(() => { AppState.GenderFilter.IsActive = false; AppState.GoToFirstPage(); LoadEmployees(); })">
                     Gender:
                     @(gender == "M" ? "Male" : "Female")
                 </MudChip>
@@ -56,7 +56,7 @@
             @if (AppState.DepartmentFilter.GetAllowedValue(out var department))
             {
                 <MudChip Color="Color.Primary"
-                         OnClose="@(() => { AppState.DepartmentFilter.IsActive = false; LoadEmployees(); })">
+                         OnClose="@(() => { AppState.DepartmentFilter.IsActive = false; AppState.GoToFirstPage(); LoadEmployees(); })">
                     Department: @DepartmentService.GetDepartment(department).DeptName
                 </MudChip>
             }
@@ -64,7 +64,7 @@
             @if (AppState.SalaryFilter.GetAllowedValue(out var salary))
             {
                 <MudChip Color="Color.Success"
-                         OnClose="@(() => { AppState.SalaryFilter.IsActive = false; LoadEmployees(); })">
+                         OnClose="@(() => { AppState.SalaryFilter.IsActive = false; AppState.GoToFirstPage(); LoadEmployees(); })">
                     Salary range: @salary
                 </MudChip>
             }
@@ -72,7 +72,7 @@
             @if (AppState.CurrentEmployeeFilter.GetAllowedValue(out var isCurrentEmployee))
             {
                 <MudChip Color="Color.Info"
-                         OnClose="@(() => { AppState.CurrentEmployeeFilter.IsActive = false; LoadEmployees(); })">
+                         OnClose="@(() => { AppState.CurrentEmployeeFilter.IsActive = false; AppState.GoToFirstPage(); LoadEmployees(); })">
                     Employees: @(isCurrentEmployee ? "Current" : "Former")
                 </MudChip>
             }
@@ -124,7 +124,10 @@
         {
             <MudPaper Class="pa-4 d-flex align-center">
                 <MudButton Color="Color.Primary" OnClick="LoadEmployees">Load next @AppState.ItemsPerPage employees</MudButton>
-                <MudButton Color="Color.Default" OnClick="@(() => { AppState.GoToFirstPage(); LoadEmployees(); })">Back to first page</MudButton>
+                @if (AppState.Page > 1)
+                {
+                    <MudButton Color="Color.Default" OnClick="@(() => { AppState.GoToFirstPage(); LoadEmployees(); })">Back to first page</MudButton>
+                }
                 <MudSpacer/>
                 <MudText Typo="Typo.button">Page: @AppState.Page</MudText>
             </MudPaper>
@@ -198,7 +201,8 @@
                 employeeView.JobTitle,
                 employeeView.DepartmentName,
                 employeeView.Salary,
-                SalarySum = SalaryService.GetSumOfSalaries(employeeView.Id)
+                SalarySum = SalaryService.GetSumOfSalaries(employeeView.Id),
+                employeeView.IsCurrentEmployee
             })
         };
 
