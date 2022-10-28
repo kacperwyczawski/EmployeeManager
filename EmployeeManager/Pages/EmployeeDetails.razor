@@ -2,10 +2,16 @@
 @using EmployeeManager.Models
 @using EmployeeManager.Services
 @inject EmployeeService EmployeeService
+@inject NavigationManager NavigationManager
 
 <MudPaper Class="pa-4 d-flex align-center gap-1">
     <MudIcon Icon="@Icons.Filled.AccountBox" Color="Color.Primary" Size="Size.Large"/>
     <MudText Typo="Typo.h4">@_employee.FirstName @_employee.LastName</MudText>
+    <MudSpacer/>
+    <MudButton Variant="Variant.Filled" Color="Color.Primary" StartIcon="@Icons.Filled.ArrowBack"
+               OnClick="@(() => NavigationManager.NavigateTo("/"))">
+        Go back
+    </MudButton>
 </MudPaper>
 
 <MudPaper Class="pa-4 mt-4 d-flex align-center gap-1">
@@ -58,8 +64,8 @@
     Employee _employee;
 
     readonly DateOnly _infiniteDate = new(9999, 1, 1);
-    
-    const string DateFormat = "d MMMM yyyy";
+
+        const string DateFormat = "d MMMM yyyy";
 
     IEnumerable<IJob> _jobs = Enumerable.Empty<IJob>();
 
