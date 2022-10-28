@@ -1,10 +1,15 @@
 ﻿@inherits LayoutComponentBase
+@inject NavigationManager NavigationManager
 
 <PageTitle>EmployeeManager</PageTitle>
 
 <MudThemeProvider/>
 <MudDialogProvider/>
 <MudSnackbarProvider/>
+
+<MudScrollToTop>
+    <MudFab Color="Color.Tertiary" StartIcon="@Icons.Filled.KeyboardArrowUp"/>
+</MudScrollToTop>
 
 <MudContainer MaxWidth="MaxWidth.Medium" Class="pa-4">
     @Body
