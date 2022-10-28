@@ -21,7 +21,7 @@ public class EmployeeService
         _appState = appState;
     }
 
-    public IEnumerable<EmployeeView> GetEmployees()
+    public IEnumerable<EmployeeView> GetEmployees(out int count)
     {
         var amount = _appState.ItemsPerPage;
 
@@ -40,6 +40,8 @@ public class EmployeeService
             .ThenInclude(dm => dm.DeptNoNavigation)
             .AsQueryable();
 
+        // this could be simplified by using reflection and custom attribute on filters in app state
+        
         // gender filter
         if (_appState.GenderFilter.GetAllowedValue(out var allowedGender))
             employees = employees.Where(e =>
@@ -66,6 +68,8 @@ public class EmployeeService
                 // ReSharper disable once ArrangeRedundantParentheses
                 (e.Salaries.OrderByDescending(s => s.ToDate).First().ToDate == infiniteDate) == isCurrentEmployee);
 
+        count = employees.Count();
+        
         employees = employees.Take(amount);
 
         _appState.LastEmployeeId = employees.LastOrDefault()?.EmpNo;

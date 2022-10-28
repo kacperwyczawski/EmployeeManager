@@ -129,7 +129,7 @@
                     <MudButton Color="Color.Default" OnClick="@(() => { AppState.GoToFirstPage(); LoadEmployees(); })">Back to first page</MudButton>
                 }
                 <MudSpacer/>
-                <MudText Typo="Typo.button">Page: @AppState.Page</MudText>
+                <MudText Typo="Typo.button">Page: @AppState.Page/@_totalPages</MudText>
             </MudPaper>
         }
     }
@@ -145,6 +145,10 @@
 @code
 {
     bool isExporting;
+    
+    int _totalEmployees;
+
+    int _totalPages => _totalEmployees / AppState.ItemsPerPage + 1;
 
     static Color GenderIconColor(EmployeeView employee) => (employee.IsCurrentEmployee, employee.IsMale) switch
     { 
@@ -167,7 +171,7 @@
 
     void LoadEmployees()
     {
-        _employees = EmployeeService.GetEmployees();
+        _employees = EmployeeService.GetEmployees(out _totalEmployees);
         StateHasChanged();
     }
 
