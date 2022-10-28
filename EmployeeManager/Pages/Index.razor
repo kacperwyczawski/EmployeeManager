@@ -182,6 +182,9 @@
 
     void Export()
     {
+        if (!_employeesToExport.Any())
+            return;
+
         Logger.LogInformation("Exporting {Count} employees", _employeesToExport.Count);
 
         var exportData = new
