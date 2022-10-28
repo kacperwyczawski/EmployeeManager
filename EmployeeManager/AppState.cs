@@ -3,6 +3,8 @@
 public class AppState
 {
     private readonly ILogger<AppState> _logger;
+    
+    private int? _lastEmployeeId;
 
     public AppState(ILogger<AppState> logger)
     {
@@ -13,9 +15,25 @@ public class AppState
     public int ItemsPerPage { get; set; }
 
     /// <summary>
-    /// Used for keyset pagination
+    /// Used for keyset pagination,
+    /// setting this value will cause incrementing the page number (except setting it to null)
     /// </summary>
-    public int? LastEmployeeId { get; set; }
+    public int? LastEmployeeId
+    {
+        get => _lastEmployeeId;
+        set
+        {
+            if (value is not null)
+                Page++;
+            
+            _lastEmployeeId = value;
+        }
+    }
+
+    /// <summary>
+    /// Indicates the current page number, 0 means there is no employees loaded, 1 is the first page
+    /// </summary>
+    public int Page { get; private set; }
 
     public Filter<string> GenderFilter { get; set; } = new("M");
 
@@ -29,6 +47,12 @@ public class AppState
     public Filter<bool> CurrentEmployeeFilter { get; set; } = new(true);
 
     public event Action? OnFiltersChange;
+    
+    public void GoToFirstPage()
+    {
+        LastEmployeeId = null;
+        Page = 0;
+    }
 
     public void ResetToDefaults()
     {

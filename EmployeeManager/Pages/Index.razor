@@ -122,9 +122,11 @@
 
         @if (_employees.Count() >= AppState.ItemsPerPage && !isExporting)
         {
-            <MudPaper Class="pa-4">
+            <MudPaper Class="pa-4 d-flex align-center">
                 <MudButton Color="Color.Primary" OnClick="LoadEmployees">Load next @AppState.ItemsPerPage employees</MudButton>
-                <MudButton Color="Color.Default" OnClick="@(() => { AppState.LastEmployeeId = null; LoadEmployees(); })">Back to first page</MudButton>
+                <MudButton Color="Color.Default" OnClick="@(() => { AppState.GoToFirstPage(); LoadEmployees(); })">Back to first page</MudButton>
+                <MudSpacer/>
+                <MudText Typo="Typo.button">Page: @AppState.Page</MudText>
             </MudPaper>
         }
     }
@@ -170,7 +172,7 @@
     {
         Logger.LogInformation("Initializing");
         AppState.OnFiltersChange += LoadEmployees;
-        AppState.LastEmployeeId = null;
+        AppState.GoToFirstPage();
         LoadEmployees();
     }
 
