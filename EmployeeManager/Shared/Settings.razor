@@ -75,6 +75,7 @@
     void Save()
     {
         MudDialog.Close(DialogResult.Ok(true));
+        AppState.LastEmployeeId = null; // go to first page
         AppState.NotifyFiltersChanged();
     }
 
